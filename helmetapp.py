@@ -1,5 +1,4 @@
 import streamlit as st
-import cv2
 import tempfile
 import numpy as np
 from ultralytics import YOLO
@@ -113,3 +112,4 @@ if uploaded_file is not None:
                 file_name="helmet_detected.mp4",
                 mime="video/mp4"
             )
+
