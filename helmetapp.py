@@ -1,56 +1,44 @@
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"   # force CPU (VERY IMPORTANT)
-
 import streamlit as st
+import cv2
 import tempfile
 import numpy as np
-from PIL import Image
 from ultralytics import YOLO
+from PIL import Image
 
+# ---------------- LOAD MODEL ----------------
+model = YOLO("best_helmet.pt")
+
+# ---------------- STREAMLIT CONFIG ----------------
 st.set_page_config(page_title="🪖 Helmet Detection", layout="centered")
-
 st.title("🪖 Helmet Detection App")
 st.write("Upload an image or video to detect helmet on heads.")
 
-# ---------- LAZY LOAD OPENCV ----------
-def load_cv2():
-    import cv2
-    return cv2
-
-cv2 = load_cv2()
-
-# ---------- LAZY LOAD YOLO MODEL ----------
-@st.cache_resource
-def load_model():
-    return YOLO("best_helmet.pt")
-
-model = load_model()
-
-# ---------- FILE UPLOADER ----------
+# ---------------- FILE UPLOADER ----------------
 uploaded_file = st.file_uploader(
     "Upload Image or Video",
     type=["jpg", "jpeg", "png", "mp4", "avi", "mov"]
 )
 
-# ---------------- IMAGE DETECTION ----------------
+# ---------------- IMAGE DETECTION FUNCTION ----------------
 def detect_image_with_status(image):
     results = model(image)
     boxes = results[0].boxes
 
-    status = "❌ Helmet Not Found"
     if boxes is not None and len(boxes) > 0:
         status = "✅ Helmet Found"
+    else:
+        status = "❌ Helmet Not Found"
 
     annotated_image = results[0].plot()
     return annotated_image, status
 
-# ---------------- VIDEO DETECTION ----------------
+# ---------------- VIDEO DETECTION FUNCTION ----------------
 def detect_video(video_path, output_path):
     cap = cv2.VideoCapture(video_path)
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS) or 25
+    fps = cap.get(cv2.CAP_PROP_FPS)
 
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
@@ -77,23 +65,29 @@ if uploaded_file is not None:
         image_np = np.array(image)
 
         st.subheader("📷 Original Image")
-        st.image(image_np, use_container_width=True)
+        st.image(image_np, use_column_width=True)
 
         detected_image, status = detect_image_with_status(image_np)
 
         st.subheader("🔍 Detection Result")
-        st.success(status) if "Found" in status else st.error(status)
+        if "Found" in status:
+            st.success(status)
+        else:
+            st.error(status)
 
-        st.image(detected_image, use_container_width=True)
+        st.image(detected_image, use_column_width=True)
 
-        # Save result
+        # Save image
         result_path = "detected_image.jpg"
-        cv2.imwrite(result_path, cv2.cvtColor(detected_image, cv2.COLOR_RGB2BGR))
+        cv2.imwrite(
+            result_path,
+            cv2.cvtColor(detected_image, cv2.COLOR_RGB2BGR)
+        )
 
         with open(result_path, "rb") as file:
             st.download_button(
-                "⬇️ Download Result Image",
-                file,
+                label="⬇️ Download Result Image",
+                data=file,
                 file_name="helmet_detected.jpg",
                 mime="image/jpeg"
             )
@@ -117,8 +111,8 @@ if uploaded_file is not None:
 
         with open(output_video, "rb") as file:
             st.download_button(
-                "⬇️ Download Result Video",
-                file,
+                label="⬇️ Download Result Video",
+                data=file,
                 file_name="helmet_detected.mp4",
                 mime="video/mp4"
             )
