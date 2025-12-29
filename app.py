@@ -6,12 +6,12 @@ from ultralytics import YOLO
 from PIL import Image
 
 # Load YOLO model
-model = YOLO("best_helmet.pt")
+model = YOLO("best_number.pt")
 
-st.set_page_config(page_title="🪖 Helmet Detection", layout="centered")
+st.set_page_config(page_title="🚗 License Plate Detection", layout="centered")
 
-st.title(" 🪖 Helmet Detection App")
-st.write("Upload an image or video to detect helmet on heads.")
+st.title("🚗 License Plate Detection App")
+st.write("Upload an image or video to detect vehicle number plates.")
 
 # File uploader
 uploaded_file = st.file_uploader(
@@ -85,7 +85,7 @@ if uploaded_file is not None:
             st.download_button(
                 label="⬇️ Download Result Image",
                 data=file,
-                file_name="Helmet_detected.jpg",
+                file_name="licence_plate_detected.jpg",
                 mime="image/jpeg"
             )
 
@@ -110,6 +110,6 @@ if uploaded_file is not None:
             st.download_button(
                 label="⬇️ Download Result Video",
                 data=file,
-                file_name="helmet_detected.mp4",
+                file_name="license_plate_detected.mp4",
                 mime="video/mp4"
             )
