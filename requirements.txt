@@ -1,13 +1,6 @@
 streamlit
 pandas
-ultralytics
+ultralytics==8.0.196
 opencv-python-headless
 openpyxl
 Pillow
-
-
-
-
-
-
-
