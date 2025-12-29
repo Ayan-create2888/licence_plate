@@ -7,6 +7,8 @@ from PIL import Image
 
 # ---------------- LOAD MODEL ----------------
 model = YOLO("best_helmet.pt")
+st.write("OpenCV imported successfully")
+
 
 # ---------------- STREAMLIT CONFIG ----------------
 st.set_page_config(page_title="🪖 Helmet Detection", layout="centered")
@@ -116,3 +118,4 @@ if uploaded_file is not None:
                 file_name="helmet_detected.mp4",
                 mime="video/mp4"
             )
+
