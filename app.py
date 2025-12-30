@@ -8,7 +8,7 @@ st.title("🚗 License Plate Detection")
 
 @st.cache_resource
 def load_model():
-    return YOLO("models/best_number.pt")
+    return YOLO("best_number.pt")
 
 model = load_model()
 
@@ -44,3 +44,4 @@ if uploaded_file:
 
         with open(output_video, "rb") as f:
             st.download_button("⬇ Download Result Video", f, "license_plate.mp4")
+
