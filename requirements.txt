@@ -1,7 +1,10 @@
 streamlit
-pandas
-ultralytics==8.0.196
-opencv-python-headless==4.9.0.80
-openpyxl
-Pillow
+ultralytics
+torch
+torchvision
+numpy
+pillow
+imageio
+imageio-ffmpeg
+
 
