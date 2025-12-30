@@ -6,5 +6,7 @@ numpy
 pillow
 imageio
 imageio-ffmpeg
+protobuf<4.0.0
+
 
 
