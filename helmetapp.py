@@ -8,7 +8,7 @@ st.title("🪖 Helmet Detection")
 
 @st.cache_resource
 def load_model():
-    return YOLO("models/best_helmet.pt")
+    return YOLO("best_helmet.pt")
 
 model = load_model()
 
@@ -57,3 +57,4 @@ if uploaded_file:
                 f,
                 file_name="helmet_detection.mp4"
             )
+
