@@ -4,7 +4,7 @@ from PIL import Image
 import tempfile
 import os
 
-st.title("🪖 Helmet Detection")
+st.title(" Helmet detector")
 
 @st.cache_resource
 def load_model():
@@ -24,37 +24,23 @@ if uploaded_file:
     temp_file.close()
 
     if suffix.lower() in [".jpg", ".jpeg", ".png"]:
-        image = Image.open(temp_file.name)
-        st.image(image, caption="Original Image", use_column_width=True)
+        st.image(Image.open(temp_file.name), caption="Original Image")
 
         results = model.predict(temp_file.name, save=True)
         output_path = results[0].save_dir + "/" + os.path.basename(temp_file.name)
 
-        st.image(output_path, caption="Detected Image", use_column_width=True)
+        st.image(output_path, caption="Detected Image")
 
         with open(output_path, "rb") as f:
-            st.download_button(
-                "⬇ Download Result",
-                f,
-                file_name="helmet_detection.jpg"
-            )
+            st.download_button("⬇ Download Result", f, "helmet_detection.jpg")
 
     else:
         st.video(temp_file.name)
 
-        results = model.predict(
-            source=temp_file.name,
-            save=True
-        )
-
+        results = model.predict(temp_file.name, save=True)
         output_video = results[0].save_dir + "/" + os.path.basename(temp_file.name)
 
         st.video(output_video)
 
         with open(output_video, "rb") as f:
-            st.download_button(
-                "⬇ Download Result Video",
-                f,
-                file_name="helmet_detection.mp4"
-            )
-
+            st.download_button("⬇ Download Result Video", f, "helmet_detection.mp4")
