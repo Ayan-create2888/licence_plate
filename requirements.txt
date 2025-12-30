@@ -6,8 +6,9 @@ numpy
 pillow
 imageio
 imageio-ffmpeg
-protobuf<4.0.0
 opencv-python-headless
+
+
 
 
 
